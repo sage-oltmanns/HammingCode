@@ -7,6 +7,8 @@ def main():
     # User Input
     data_bits = int(input("Enter number of databits: "))
 
+    while data_bits <= 0:
+        data_bits = int(input("Please enter a number greater than 0: "))
     # Total bits (helper value)
     total_bits = get_full_message_length(data_bits)
     # Create Message
@@ -24,17 +26,17 @@ def main():
     corrupt_message = corrupt_a_bit(correct_message)
 
     # Find the error bit
-    error_bit_arr = check_for_error(corrupt_message, parity_check_matrix)
-    error_bit_index = error_bit_to_int(error_bit_arr)
+    corrupt_bit = check_for_error(corrupt_message, parity_check_matrix)
+    corrupt_bit_index = corrupt_bit_to_int(corrupt_bit)
 
     # Create Arrays to hold checked corrected/decoded messages
     corrected_message = np.zeros((1, total_bits), dtype=int)
     decoded_message = np.zeros((1, data_bits), dtype=int)
 
     # If an error bit was found
-    if error_bit_index != 0:
+    if corrupt_bit_index != -1:
         # Fix the bit
-        corrected_message = fix_error_bit(error_bit_index, corrupt_message.copy())
+        corrected_message = fix_corrupt_bit(corrupt_bit_index, corrupt_message.copy())
         # Correct the message
         decoded_message = np.zeros((1, data_bits), dtype=int)
         for i in range(0, data_bits):
@@ -45,7 +47,7 @@ def main():
     print("Message          :  {}".format(message))
     print("Send Vector      :  {}".format(correct_message))
     print("Received Message :  {} ".format(corrupt_message))
-    print("Parity Check     :  {}".format(error_bit_arr))
+    print("Parity Check     :  {}".format(corrupt_bit))
     print("Corrected Message:  {}".format(corrected_message))
     print("Decoded Message  :  {}".format(decoded_message[0]))
 
