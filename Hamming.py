@@ -1,5 +1,4 @@
 # Hamming Code Implementation for CENG 340
-from math import sqrt
 from HammingFunctions import *
 
 
